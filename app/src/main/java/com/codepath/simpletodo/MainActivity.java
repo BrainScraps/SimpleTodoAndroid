@@ -1,8 +1,10 @@
 package com.codepath.simpletodo;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +18,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -60,6 +63,15 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void editTodoItem(String todoItem, int listPosition) {
+        Intent i = new Intent(MainActivity.this, EditItemActivity.class);
+        Log.d( "what", todoItem);
+
+        i.putExtra("itemDescription", todoItem );
+        i.putExtra("listPosition", listPosition );
+        startActivity(i);
+    }
+
     public void onAddItem(View v){
         EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
         String itemNext = etNewItem.getText().toString();
@@ -78,6 +90,16 @@ public class MainActivity extends ActionBarActivity {
                         writeItems();
                         return true;
 
+                    }
+                }
+        );
+
+        lvItems.setOnItemClickListener(
+                new AdapterView.OnItemClickListener(){
+                    @Override
+                    public void onItemClick(AdapterView<?> adapter, View item, int pos, long id){
+                        String itemText = items.get(pos);
+                        editTodoItem(itemText, pos);
                     }
                 }
         );
