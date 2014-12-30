@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:text="@string/edit_item_button"
         android:id="@+id/button"
+        android:onClick="onSubmit"
         android:layout_below="@+id/etItemDescription"
         android:layout_centerHorizontal="true" />
 

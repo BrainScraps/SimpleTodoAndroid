@@ -26,6 +26,8 @@ public class MainActivity extends ActionBarActivity {
     ArrayAdapter<String> itemsAdapter;
     ListView lvItems;
 
+    private final int REQUEST_CODE = 20;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,13 +65,22 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE){
+            int itemIndex = data.getIntExtra("itemIndex",0);
+            items.set(itemIndex, data.getStringExtra("itemDescription"));
+            itemsAdapter.notifyDataSetChanged();
+        }
+    }
+
     public void editTodoItem(String todoItem, int listPosition) {
         Intent i = new Intent(MainActivity.this, EditItemActivity.class);
         Log.d( "what", todoItem);
 
         i.putExtra("itemDescription", todoItem );
         i.putExtra("listPosition", listPosition );
-        startActivity(i);
+        startActivityForResult(i, REQUEST_CODE);
     }
 
     public void onAddItem(View v){

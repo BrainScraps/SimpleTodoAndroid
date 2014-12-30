@@ -1,23 +1,36 @@
 package com.codepath.simpletodo;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 
 
 public class EditItemActivity extends ActionBarActivity {
     EditText etItemDescription;
+    int listPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_item);
         String itemDescription = getIntent().getStringExtra("itemDescription");
-        int listPosition = getIntent().getIntExtra("listPosition", 0);
+        listPosition = getIntent().getIntExtra("listPosition", 0);
         etItemDescription = (EditText) findViewById(R.id.etItemDescription);
         etItemDescription.setText(itemDescription);
+        etItemDescription.requestFocus();
+        setupSaveButtonListener();
+    }
+
+    public void onSubmit(View v){
+        Intent data = new Intent();
+        data.putExtra("itemDescription", etItemDescription.getText().toString());
+        data.putExtra("itemIndex", listPosition);
+        setResult(RESULT_OK, data);
+        finish();
     }
 
 
@@ -41,5 +54,8 @@ public class EditItemActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    private void setupSaveButtonListener(){
+
     }
 }
