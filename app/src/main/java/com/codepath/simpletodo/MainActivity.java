@@ -71,6 +71,7 @@ public class MainActivity extends ActionBarActivity {
             int itemIndex = data.getIntExtra("itemIndex",0);
             items.set(itemIndex, data.getStringExtra("itemDescription"));
             itemsAdapter.notifyDataSetChanged();
+            writeItems();
         }
     }
 
