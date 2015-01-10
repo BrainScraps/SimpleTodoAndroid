@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.activeandroid.ActiveAndroid;
+
 import java.util.ArrayList;
 
 /**
@@ -21,7 +23,7 @@ public class TodoItemsAdapter extends ArrayAdapter<TodoItem> {
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
 
-        TodoItem todoItem = TodoItem.getByListIndex(position+1);
+        TodoItem todoItem = TodoItem.getByListIndex(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.todo_item, parent, false);
@@ -34,5 +36,22 @@ public class TodoItemsAdapter extends ArrayAdapter<TodoItem> {
         tvPriority.setText(String.valueOf(todoItem.listIndex));
         // Return the completed view to render on screen
         return convertView;
+    }
+
+    public static void persistListIndex(ArrayList<TodoItem> todoItems){
+        ActiveAndroid.beginTransaction();
+        try {
+            int index = 0;
+            for (TodoItem t : todoItems){
+                t.listIndex = index;
+                t.save();
+                index++;
+
+            }
+            ActiveAndroid.setTransactionSuccessful();
+
+        } finally {
+            ActiveAndroid.endTransaction();
+        }
     }
 }

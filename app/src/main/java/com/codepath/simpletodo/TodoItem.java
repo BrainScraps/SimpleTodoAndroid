@@ -5,6 +5,7 @@ import android.app.LauncherActivity;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 
 
@@ -61,6 +62,11 @@ public class TodoItem extends Model{
         } else {
             return tiMax.listIndex;
         }
+    }
+
+    /// Used to reset strange states in the DB
+    public static void deleteAll(){
+        new Delete().from(TodoItem.class).where("Id > ?", 0);
     }
 
 }

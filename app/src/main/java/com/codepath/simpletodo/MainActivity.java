@@ -86,8 +86,8 @@ public class MainActivity extends ActionBarActivity {
         EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
         String itemNext = etNewItem.getText().toString();
         // make a new TodoItem and save it
-        int newItemListIndex = TodoItem.maxListIndex() + 1;
-        TodoItem newTodoItem = new TodoItem(itemNext, newItemListIndex );
+        int newTodoItemIndex = todoItems.size();
+        TodoItem newTodoItem = new TodoItem(itemNext, newTodoItemIndex );
         newTodoItem.save();
         itemsAdapter.add(newTodoItem);
         etNewItem.setText("");
@@ -99,9 +99,11 @@ public class MainActivity extends ActionBarActivity {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> adapter, View item, int pos, long id) {
                         int listIndex = itemsAdapter.getItem(pos).listIndex;
-                        todoItems.remove(TodoItem.getByListIndex(listIndex));
-
+                        TodoItem todoItem = TodoItem.getByListIndex(listIndex);
+                        todoItems.remove(todoItem);
+                        todoItem.delete();
                         itemsAdapter.notifyDataSetChanged();
+                        itemsAdapter.persistListIndex(todoItems);
                         return true;
 
                     }
