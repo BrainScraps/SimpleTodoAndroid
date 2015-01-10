@@ -13,17 +13,14 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import org.apache.commons.io.FileUtils;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
 
 public class MainActivity extends ActionBarActivity {
-    ArrayList<String> items;
-    ArrayAdapter<String> itemsAdapter;
+    ArrayList<TodoItem> todoItems;
+    TodoItemsAdapter itemsAdapter;
     ListView lvItems;
 
     private final int REQUEST_CODE = 20;
@@ -33,10 +30,11 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         lvItems = (ListView) findViewById(R.id.lvItems);
-        items = new ArrayList<String>();
-        readItems();
-        itemsAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, items);
+        todoItems = TodoItem.allSortedItems();
+        //readItems();
+        itemsAdapter = new TodoItemsAdapter(this, todoItems) ;
+        //itemsAdapter = new TodoItemsAdapter<User>(this,
+        //        android.R.layout.simple_list_item_1, items);
         lvItems.setAdapter(itemsAdapter);
         setupListViewListener();
 
@@ -69,9 +67,9 @@ public class MainActivity extends ActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE){
             int itemIndex = data.getIntExtra("itemIndex",0);
-            items.set(itemIndex, data.getStringExtra("itemDescription"));
+//            items.set(itemIndex, data.getStringExtra("itemDescription"));
             itemsAdapter.notifyDataSetChanged();
-            writeItems();
+//            writeItems();
         }
     }
 
@@ -87,9 +85,12 @@ public class MainActivity extends ActionBarActivity {
     public void onAddItem(View v){
         EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
         String itemNext = etNewItem.getText().toString();
-        itemsAdapter.add(itemNext);
+        // make a new TodoItem and save it
+        int newItemListIndex = TodoItem.maxListIndex() + 1;
+        TodoItem newTodoItem = new TodoItem(itemNext, newItemListIndex );
+        newTodoItem.save();
+        itemsAdapter.add(newTodoItem);
         etNewItem.setText("");
-        writeItems();
     }
 
     private void setupListViewListener() {
@@ -97,43 +98,25 @@ public class MainActivity extends ActionBarActivity {
                 new AdapterView.OnItemLongClickListener() {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> adapter, View item, int pos, long id) {
-                        items.remove(pos);
+                        int listIndex = itemsAdapter.getItem(pos).listIndex;
+                        todoItems.remove(TodoItem.getByListIndex(listIndex));
+
                         itemsAdapter.notifyDataSetChanged();
-                        writeItems();
                         return true;
 
                     }
                 }
         );
 
-        lvItems.setOnItemClickListener(
-                new AdapterView.OnItemClickListener(){
-                    @Override
-                    public void onItemClick(AdapterView<?> adapter, View item, int pos, long id){
-                        String itemText = items.get(pos);
-                        editTodoItem(itemText, pos);
-                    }
-                }
-        );
+//        lvItems.setOnItemClickListener(
+//                new AdapterView.OnItemClickListener(){
+//                    @Override
+//                    public void onItemClick(AdapterView<?> adapter, View item, int pos, long id){
+//                        TodoItem itemText = todoItems.get(pos);
+//                        editTodoItem(itemText, pos);
+//                    }
+//                }
+//        );
     }
 
-    private void readItems() {
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, "todo.txt");
-        try{
-            items = new ArrayList<String>(FileUtils.readLines(todoFile));
-        } catch(IOException e) {
-            items = new ArrayList<String>();
-        }
-    }
-
-    private void writeItems(){
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, "todo.txt");
-        try{
-            FileUtils.writeLines(todoFile, items);
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

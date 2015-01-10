@@ -3,6 +3,7 @@
     package="com.codepath.simpletodo" >
 
     <application
+        android:name="com.activeandroid.app.Application"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -24,6 +25,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.codepath.simpletodo.MainActivity" />
         </activity>
+        <meta-data android:name="AA_DB_NAME" android:value="android_simple_todo.db" />
+        <meta-data android:name="AA_DB_VERSION" android:value="1" />
     </application>
 
 </manifest>
