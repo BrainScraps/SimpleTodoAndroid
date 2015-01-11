@@ -4,18 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-
-
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -31,13 +26,9 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         lvItems = (ListView) findViewById(R.id.lvItems);
         todoItems = TodoItem.allSortedItems();
-        //readItems();
         itemsAdapter = new TodoItemsAdapter(this, todoItems) ;
-        //itemsAdapter = new TodoItemsAdapter<User>(this,
-        //        android.R.layout.simple_list_item_1, items);
         lvItems.setAdapter(itemsAdapter);
         setupListViewListener();
-
     }
 
 
@@ -66,18 +57,14 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE){
-            int itemIndex = data.getIntExtra("itemIndex",0);
-//            items.set(itemIndex, data.getStringExtra("itemDescription"));
             itemsAdapter.notifyDataSetChanged();
-//            writeItems();
         }
     }
 
-    public void editTodoItem(String todoItem, int listPosition) {
+    public void editTodoItem(TodoItem todoItem, int listPosition) {
         Intent i = new Intent(MainActivity.this, EditItemActivity.class);
-        Log.d( "what", todoItem);
 
-        i.putExtra("itemDescription", todoItem );
+        i.putExtra("description", todoItem.description );
         i.putExtra("listPosition", listPosition );
         startActivityForResult(i, REQUEST_CODE);
     }
@@ -87,7 +74,7 @@ public class MainActivity extends ActionBarActivity {
         String itemNext = etNewItem.getText().toString();
         // make a new TodoItem and save it
         int newTodoItemIndex = todoItems.size();
-        TodoItem newTodoItem = new TodoItem(itemNext, newTodoItemIndex );
+        TodoItem newTodoItem = new TodoItem(itemNext, newTodoItemIndex, null  );
         newTodoItem.save();
         itemsAdapter.add(newTodoItem);
         etNewItem.setText("");
@@ -102,23 +89,22 @@ public class MainActivity extends ActionBarActivity {
                         TodoItem todoItem = TodoItem.getByListIndex(listIndex);
                         todoItems.remove(todoItem);
                         todoItem.delete();
-                        itemsAdapter.notifyDataSetChanged();
                         itemsAdapter.persistListIndex(todoItems);
+                        itemsAdapter.notifyDataSetChanged();
                         return true;
-
                     }
                 }
         );
 
-//        lvItems.setOnItemClickListener(
-//                new AdapterView.OnItemClickListener(){
-//                    @Override
-//                    public void onItemClick(AdapterView<?> adapter, View item, int pos, long id){
-//                        TodoItem itemText = todoItems.get(pos);
-//                        editTodoItem(itemText, pos);
-//                    }
-//                }
-//        );
+        lvItems.setOnItemClickListener(
+                new AdapterView.OnItemClickListener(){
+                    @Override
+                    public void onItemClick(AdapterView<?> adapter, View item, int pos, long id){
+                        TodoItem itemText = todoItems.get(pos);
+                        editTodoItem(itemText, pos);
+                    }
+                }
+        );
     }
 
 }

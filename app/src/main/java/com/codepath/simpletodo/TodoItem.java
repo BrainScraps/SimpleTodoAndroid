@@ -25,15 +25,19 @@ public class TodoItem extends Model{
     @Column(name = "ListIndex")
     public int listIndex;
 
+    @Column(name = "DueDate")
+    public String dueDate;
+
     // Make sure to have a default constructor for every ActiveAndroid model
     public TodoItem(){
         super();
     }
 
-    public TodoItem(String description, int priority ){
+    public TodoItem(String description, int listIndex, String dueDate ){
         super();
         this.description = description;
-        this.listIndex = priority;
+        this.listIndex = listIndex;
+        this.dueDate = dueDate;
     }
 
     public static TodoItem getByListIndex(int priority){
@@ -46,22 +50,8 @@ public class TodoItem extends Model{
     public static ArrayList<TodoItem> allSortedItems(){
         return new Select()
                     .from(TodoItem.class)
-                    .orderBy("ListIndex DESC")
+                    .orderBy("ListIndex ASC")
                     .execute();
-    }
-
-    // gives the current maximum listIndex number
-    public static int maxListIndex(){
-        TodoItem tiMax = new Select()
-                .from(TodoItem.class)
-                .orderBy("ListIndex DESC")
-                .executeSingle();
-
-        if(tiMax == null){
-           return 0;
-        } else {
-            return tiMax.listIndex;
-        }
     }
 
     /// Used to reset strange states in the DB

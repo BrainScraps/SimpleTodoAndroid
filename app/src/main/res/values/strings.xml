@@ -7,5 +7,6 @@
     <string name="title_activity_edit_item">EditItemActivity</string>
     <string name="edit_description_label">Edit Todo Item:</string>
     <string name="edit_item_button">Save</string>
+    <string name="edit_due_date_label">Due Date:</string>
 
 </resources>

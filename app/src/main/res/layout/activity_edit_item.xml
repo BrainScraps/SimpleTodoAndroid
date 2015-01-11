@@ -14,16 +14,6 @@
         android:id="@+id/etItemDescription"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/edit_item_button"
-        android:id="@+id/button"
-        android:onClick="onSubmit"
-        android:layout_below="@+id/etItemDescription"
-        android:layout_centerHorizontal="true" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,5 +21,35 @@
         android:id="@+id/textView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        android:ems="10"
+        android:id="@+id/etItemDueDate"
+        android:layout_below="@+id/editDueDateLabel"
+        android:layout_alignLeft="@+id/etItemDescription"
+        android:layout_alignStart="@+id/etItemDescription"
+        android:layout_marginTop="28dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_due_date_label"
+        android:id="@+id/editDueDateLabel"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/etItemDescription"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_item_button"
+        android:id="@+id/button"
+        android:onClick="onSubmit"
+        android:layout_below="@+id/etItemDueDate"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView"
+        android:layout_marginTop="35dp" />
+
 
 </RelativeLayout>

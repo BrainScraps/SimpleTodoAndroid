@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.activeandroid.ActiveAndroid;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 /**
@@ -30,10 +32,10 @@ public class TodoItemsAdapter extends ArrayAdapter<TodoItem> {
         }
         // Lookup view for data population
         TextView tvDescription = (TextView) convertView.findViewById(R.id.tvDescription);
-        TextView tvPriority = (TextView) convertView.findViewById(R.id.tvPriority);
+        TextView tvDueDate = (TextView) convertView.findViewById(R.id.tvDueDate);
         // Populate the data into the template view using the data object
         tvDescription.setText(todoItem.description);
-        tvPriority.setText(String.valueOf(todoItem.listIndex));
+        tvDueDate.setText(todoItem.dueDate);
         // Return the completed view to render on screen
         return convertView;
     }

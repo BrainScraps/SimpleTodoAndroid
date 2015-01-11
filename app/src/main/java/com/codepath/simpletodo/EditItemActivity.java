@@ -11,23 +11,33 @@ import android.widget.EditText;
 
 public class EditItemActivity extends ActionBarActivity {
     EditText etItemDescription;
+    EditText etItemDueDate;
     int listPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_item);
-        String itemDescription = getIntent().getStringExtra("itemDescription");
+        String itemDescription = getIntent().getStringExtra("description");
+        String itemDueDate = getIntent().getStringExtra("dueDate");
         listPosition = getIntent().getIntExtra("listPosition", 0);
         etItemDescription = (EditText) findViewById(R.id.etItemDescription);
+        etItemDueDate = (EditText) findViewById(R.id.etItemDueDate);
         etItemDescription.setText(itemDescription);
+        etItemDueDate.setText(itemDueDate);
         etItemDescription.requestFocus();
         setupSaveButtonListener();
     }
 
     public void onSubmit(View v){
         Intent data = new Intent();
-        data.putExtra("itemDescription", etItemDescription.getText().toString());
+        String description =  etItemDescription.getText().toString();
+        String dueDate = etItemDueDate.getText().toString();
+        TodoItem todoItem = TodoItem.getByListIndex(listPosition);
+        todoItem.description = description;
+        todoItem.dueDate = dueDate;
+        todoItem.save();
+        data.putExtra("itemDescription", description);
         data.putExtra("itemIndex", listPosition);
         setResult(RESULT_OK, data);
         finish();
