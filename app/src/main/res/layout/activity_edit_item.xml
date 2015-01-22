@@ -30,6 +30,7 @@
         android:layout_below="@+id/editDueDateLabel"
         android:layout_alignLeft="@+id/etItemDescription"
         android:layout_alignStart="@+id/etItemDescription"
+        android:onClick="showDatePickerDialog"
         android:layout_marginTop="28dp" />
     <TextView
         android:layout_width="wrap_content"

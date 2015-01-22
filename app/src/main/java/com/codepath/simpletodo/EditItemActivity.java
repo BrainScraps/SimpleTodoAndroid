@@ -1,15 +1,19 @@
 package com.codepath.simpletodo;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.support.v4.app.DialogFragment;
 
 
-public class EditItemActivity extends ActionBarActivity {
+
+public class EditItemActivity extends ActionBarActivity implements DatePickerDialog.OnDateSetListener {
     EditText etItemDescription;
     EditText etItemDueDate;
     int listPosition;
@@ -66,6 +70,19 @@ public class EditItemActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
     private void setupSaveButtonListener(){
+
+    }
+
+    public void showDatePickerDialog(View view) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        String dueDateText = String.valueOf(monthOfYear) + '-' +
+                             String.valueOf(dayOfMonth) + '-' +
+                             String.valueOf(year);
+        ((EditText) findViewById(R.id.etItemDueDate)).setText(dueDateText);
 
     }
 }
